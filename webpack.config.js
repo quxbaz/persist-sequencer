@@ -1,10 +1,9 @@
 require('es6-promise').polyfill();
 var path = require('path');
 var join = path.join;
-
 var dir = path.resolve(__dirname);
 
-var config = {
+module.exports = {
 
   cache: true,
   devtool: 'eval-source-map',
@@ -36,17 +35,10 @@ var config = {
 
   resolve: {
     root: dir,
-    extensions: ['', '.js']
+    extensions: ['', '.js'],
+    alias: {
+      'persist-sequencer': dir
+    }
   }
 
 };
-
-if (process.env.mode === 'build') {
-  config.entry = resolve(__dirname, 'index.js');
-  // config.devtool = 'inline-source-map';
-  config.devtool = undefined;
-  config.output.path = './build/';
-  config.output.filename = 'sequencer.js';
-}
-
-module.exports = config;
