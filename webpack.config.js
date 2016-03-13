@@ -6,7 +6,7 @@ var dir = path.resolve(__dirname);
 module.exports = {
 
   cache: true,
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   entry: 'test/test.js',
 
   output: {
@@ -23,6 +23,7 @@ module.exports = {
           join(dir, 'node_modules/sentry'),
           join(dir, 'node_modules/stateful'),
           join(dir, 'node_modules/store'),
+          join(dir, 'node_modules/bin.js'),
           join(dir, 'test'),
           join(dir, 'index.js'),
           join(dir, 'lib')

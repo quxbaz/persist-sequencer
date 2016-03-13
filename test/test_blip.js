@@ -1,17 +1,26 @@
-import Blip from 'lib/blip';
+import Store from 'store';
+import LSAdapter from 'store/lib/adapters/ls/adapter';
+import {initModels, setStore} from 'persist-sequencer/lib/localstore';
 
 describe('Blip', () => {
 
+  let store;
   let blip;
 
   beforeEach(() => {
-    blip = new Blip();
+    localStorage.clear();
+    store = new Store({adapter: new LSAdapter()})
+    setStore(store);
+    initModels();
+    return store.all(['sequencer', 'channel', 'blip']).then(() => {
+      blip = store.Blip.create();
+    });
   });
 
   it("blips have unique ids.", () => {
     let ids = new Set();
     for (let i=0; i < 1000; i++)
-      ids.add(new Blip().id);
+      ids.add(store.Blip.create().id);
     ids.size.should.eql(1000);
   });
 
@@ -53,12 +62,6 @@ describe('Blip', () => {
   it("sets a new min gain and validates again it.", () => {
     blip.setState({gain: -2, minGain: -3});
     blip.state.gain.should.eql(-2);
-  });
-
-  it("sets custom defaults.", () => {
-    let defaults = require('lib/defaults').blipDefaults;
-    defaults.offset = 60;
-    new Blip().state.offset.should.eql(60);
   });
 
 });

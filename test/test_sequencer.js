@@ -1,20 +1,20 @@
-import Sequencer from 'lib/sequencer';
+import Store from 'store';
+import LSAdapter from 'store/lib/adapters/ls/adapter';
+import {initModels, setStore} from 'persist-sequencer/lib/localstore';
 
 describe("Sequencer", () => {
 
+  let store;
   let sequencer;
 
   beforeEach(() => {
-    sequencer = new Sequencer();
-  });
-
-  it("initializes a Sequencer object with custom state.", () => {
-    let sequencer = new Sequencer({
-      currentBeat: 8,
-      beatDuration: 420
+    localStorage.clear();
+    store = new Store({adapter: new LSAdapter()})
+    setStore(store);
+    initModels();
+    return store.all(['sequencer', 'channel', 'blip']).then(() => {
+      sequencer = store.Sequencer.create();
     });
-    sequencer.state.currentBeat.should.eql(8);
-    sequencer.state.beatDuration.should.eql(420);
   });
 
   it("plays and alters its state.", () => {
@@ -42,9 +42,9 @@ describe("Sequencer", () => {
   });
 
   it("adds a channel.", () => {
-    sequencer.state.channels.length.should.eql(0);
+    sequencer.take('channels').length.should.eql(0);
     sequencer.addChannel();
-    sequencer.state.channels.length.should.eql(1);
+    sequencer.take('channels').length.should.eql(1);
   });
 
   it("publishes a 'playBlip' message.", () => {
@@ -60,7 +60,7 @@ describe("Sequencer", () => {
       ch.should.eql(channel);
       done();
     });
-    channel.state.blips[0].play();
+    channel.take('blips')[0].play();
   });
 
 });

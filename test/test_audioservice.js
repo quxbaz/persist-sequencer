@@ -36,10 +36,15 @@ describe("AudioService", function() {
   });
 
   it("should play two audible hihat sounds (this test will always pass).", () => {
-    let blip = new Blip({sample: 'hihat'});
-    audioService.playBlip(blip.state);
+    let state = {
+      sample: 'hihat',
+      gain: 1,
+      rate: 1,
+      offset: 0
+    };
+    audioService.playBlip(state);
     setTimeout(() => {
-      audioService.playBlip(blip.state);
+      audioService.playBlip(state);
     }, 200);
   });
 

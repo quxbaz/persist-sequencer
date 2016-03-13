@@ -1,0 +1,7 @@
+Todo List
+
+* Todo
+  - [X] Define models
+  - [X] Custom classes for models to instantiate records
+  - [X] Cache collections
+  - [X] Move defaults to models
